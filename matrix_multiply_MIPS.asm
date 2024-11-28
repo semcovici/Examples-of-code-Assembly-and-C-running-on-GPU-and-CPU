@@ -8,9 +8,32 @@ P: .word  4
 A: .word  1, 2, 3, 4, 5, 6         # { {1, 2}, {3, 4}, {5, 6} }
 B: .word  8, 7, 6, 5, 4, 3, 2, 1   # { {8, 7, 6, 5}, {4, 3, 2, 1} }
 C: .space 48
+
+newline: .asciiz "\n"  # Define a string com a quebra de linha
+
+
+start_ts: 
+.align 2
+.space 4
+end_ts: 
+.align 2
+.space 4
+elapsed_time: 
+.align 2
+.space 4
+
+
+elapsed_time_msg: .asciiz "Tempo decorrido para realizar a multiplicação de matrix: "
   
 .text
 
+# Captura do tempo inicial
+li   $v0, 30          # Syscall para obter tempo em milissegundos
+syscall
+
+# salva valor de inicio
+la $t0, start_ts
+sw $a0, 0($t0) 
 
 # Store M, N, P in $a? registers
 lw   $a0, N
@@ -18,8 +41,41 @@ lw   $a1, M
 lw   $a2, P
 jal  multiply
 
+# Captura do tempo inicial
+li   $v0, 30          # Syscall para obter tempo em milissegundos
+syscall
+
+# salva valor de inicio
+la $t0, end_ts
+sw $a0, 0($t0) 
+
+# printa tempo decorrido na multiplicacao
+la $t0, start_ts
+lw $t0, ($t0)
+
+la $t1, end_ts
+lw $t1, 0($t1)
+
+sub $t1, $t1, $t0
+
+
+li $v0, 4          # Código da syscall para print_string
+la $a0, elapsed_time_msg    # Carrega o endereço da string "\n" em $a0
+syscall            # Chama a syscall para imprimir a quebra de linha
+
+# Imprime o tempo decorrido
+li   $v0, 1           # Syscall para imprimir inteiro
+move $a0, $t1
+syscall
+
+
+li $v0, 4          # Código da syscall para print_string
+la $a0, newline    # Carrega o endereço da string "\n" em $a0
+syscall            # Chama a syscall para imprimir a quebra de linha
+
 # Após jal multiply
 jal print_matrix
+
 
 # finaliza programa
 li $v0, 10
