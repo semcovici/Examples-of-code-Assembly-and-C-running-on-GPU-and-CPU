@@ -9,6 +9,14 @@ A: .word  1, 2, 3, 4, 5, 6         # { {1, 2}, {3, 4}, {5, 6} }
 B: .word  8, 7, 6, 5, 4, 3, 2, 1   # { {8, 7, 6, 5}, {4, 3, 2, 1} }
 C: .space 48
 
+
+# N: .word  1025            # Linhas de A
+# M: .word  1035            # Colunas de A e linhas de B
+# P: .word  1031            # Colunas de B
+# A: .word  1, 2, 3, 4, 5, 6         # { {1, 2}, {3, 4}, {5, 6} }
+# B: .word  8, 7, 6, 5, 4, 3, 2, 1   # { {8, 7, 6, 5}, {4, 3, 2, 1} }
+# C: .space 4227100
+
 newline: .asciiz "\n"  # Define a string com a quebra de linha
 
 
