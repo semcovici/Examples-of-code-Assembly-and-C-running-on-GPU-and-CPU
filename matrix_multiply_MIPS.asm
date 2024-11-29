@@ -1,14 +1,21 @@
-
-# A (n, m)
-# B (m, p)
 .data
-N: .word  3
-M: .word  2
-P: .word  4
-A: .word  1, 2, 3, 4, 5, 6         # { {1, 2}, {3, 4}, {5, 6} }
-B: .word  8, 7, 6, 5, 4, 3, 2, 1   # { {8, 7, 6, 5}, {4, 3, 2, 1} }
+N: .word 131 #1031
+M: .word 125 #1025
+P: .word 135 #1035
+A:
+	#.align 2	 
+	.space 67500  # 16875 * 4   #4243500   # 1060875 * 4
+B: 
+	#.align 2
+	.space 70740  #17685 * 4 #4268340   # 1067085 * 4
 C: .space 48
 
+# caminho para os arquivos
+matriz_a: .asciiz "./matriz_a.txt"
+matriz_b: .asciiz "./matriz_b.txt"
+
+msg_inita: .asciiz "Teste 3 primeiros 3 ultimos dados\n"
+msg_a: .asciiz "\nValor de A\n"
 
 # N: .word  1025            # Linhas de A
 # M: .word  1035            # Colunas de A e linhas de B
@@ -30,10 +37,158 @@ elapsed_time:
 .align 2
 .space 4
 
-
-elapsed_time_msg: .asciiz "Tempo decorrido para realizar a multiplicação de matrix: "
+elapsed_time_msg: .asciiz "Tempo decorrido para realizar a multiplicação de matrix: \n"
   
 .text
+
+# leitura dos dados da matriz A
+la $a0, matriz_a          # caminho para o arquivo da matriz
+la $a1, A                 # endereço do vetor da matriz 
+jal readFileMainInt          # chamar função para ler o arquivo
+move $t0, $v0             # armazenar o número de valores lidos em $t0
+
+# leitura dos dados da matriz B
+la $a0, matriz_b          # caminho para o arquivo da matriz
+la $a1, B                 # endereço do vetor da matriz 
+jal readFileMainInt          # chamar função para ler o arquivo
+move $t1, $v0             # armazenar o número de valores lidos em $t1
+
+la $a3, A
+la $s7, B
+
+#-------------------- TESTA DATA LOAD -------------------------
+# inicia teste A
+li $v0, 4
+la $a0, msg_inita
+syscall
+
+# imprime primeiro valor
+li $v0, 1
+lw $t0, 0($a3)
+addiu $a0, $t0, 0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+# imprime segundo valor
+li $v0, 1
+lw $t0, 4($a3)
+addiu $a0, $t0, 0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+# imprime terceiro valor
+li $v0, 1
+lw $t0, 8($a3)
+addiu $a0, $t0, 0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+# imprime antipenultimo valor
+li $v0, 1
+lw $t0, 67492($a3)
+addiu $a0, $t0, 0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+# imprime penultimo valor
+li $v0, 1
+lw $t0, 67496($a3)
+addiu $a0, $t0, 0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+# imprime ultimo valor
+#li $v0, 1
+#lw $t0, 67500($a3)
+#addiu $a0, $t0, 0
+#syscall
+
+#li $v0, 4
+#la $a0, newline
+#syscall
+
+############################################
+
+# inicia teste B
+li $v0, 4
+la $a0, msg_inita
+syscall
+
+# imprime primeiro valor
+li $v0, 1
+lw $t0, 0($s7)
+addiu $a0, $t0, 0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+# imprime segundo valor
+li $v0, 1
+lw $t0, 4($s7)
+addiu $a0, $t0, 0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+# imprime terceiro valor
+li $v0, 1
+lw $t0, 8($s7)
+addiu $a0, $t0, 0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+# imprime antipenultimo valor
+li $v0, 1
+lw $t0, 70732($s7)
+addiu $a0, $t0, 0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+# imprime penultimo valor
+li $v0, 1
+lw $t0, 70736($s7)
+addiu $a0, $t0, 0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+# imprime ultimo valor
+#li $v0, 1
+#lw $t0, 70740($s7)
+#addiu $a0, $t0, 0
+#syscall
+
+#li $v0, 4
+#la $a0, newline
+#syscall
+#--------------------------------------------------------------
 
 # Captura do tempo inicial
 li   $v0, 30          # Syscall para obter tempo em milissegundos
@@ -77,12 +232,12 @@ move $a0, $t1
 syscall
 
 
-li $v0, 4          # Código da syscall para print_string
-la $a0, newline    # Carrega o endereço da string "\n" em $a0
-syscall            # Chama a syscall para imprimir a quebra de linha
+#li $v0, 4          # Código da syscall para print_string
+#la $a0, newline    # Carrega o endereço da string "\n" em $a0
+#syscall            # Chama a syscall para imprimir a quebra de linha
 
 # Após jal multiply
-jal print_matrix
+#jal print_matrix
 
 
 # finaliza programa
@@ -146,6 +301,18 @@ mult_loop3:
   mul  $t6, $s5, $t0        # t6 = i * 4
   add  $t5, $t5, $t6        # t5 = (r * m * 4) + (i * 4)
   lw   $t5, A($t5)
+
+	# Imprimi A
+	#li $v0, 4
+	#la $a0, msg_a
+	#syscall
+
+	# imprime primeiro valor
+	#li $v0, 1
+	## lw $t0, 0($a3)
+	#addiu $a0, $t5, 0
+	#syscall
+
 
   # B[i][c]
   mul  $t7, $s5, $s2        # t7 = i * n
