@@ -7,7 +7,7 @@ def generate_matrix_data(rows, cols, label):
     return elements
 
 # Dimensões das matrizes
-M, K, N = 1002, 103, 101
+M, K, N = 1000, 100, 100
 
 # Gerar matriz A
 generate_matrix_data(M, K, "A")
