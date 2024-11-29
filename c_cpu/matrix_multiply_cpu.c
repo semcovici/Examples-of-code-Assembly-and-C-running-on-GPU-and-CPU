@@ -3,14 +3,14 @@
 #include <time.h>
 
 // Dimensões das matrizes
-int M = 125;
-int N = 135;
-int K = 131;
+int M = 1002;
+int N = 101;
+int K = 103;
 
 // Função para inicializar as matrizes com valores aleatórios
 void initialize_matrix(int *matrix, int rows, int cols) {
     for (int i = 0; i < rows * cols; i++) {
-        matrix[i] = rand() % 11 - 5; // Valores entre -5 e 5
+        matrix[i] = rand() % 9 + 1; // Valores entre -5 e 5
     }
 }
 
