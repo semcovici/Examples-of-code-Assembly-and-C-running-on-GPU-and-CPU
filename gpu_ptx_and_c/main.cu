@@ -102,7 +102,7 @@ void measure_ptx(const int* d_A, int* d_B, int* d_C, int loop_exe=LOOP) {
 
 
 int init_value() {
-    return std::rand()%11-5;
+    return std::rand() % 10 + 1;
 }
 
 

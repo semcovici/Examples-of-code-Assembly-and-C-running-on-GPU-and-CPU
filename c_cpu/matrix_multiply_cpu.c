@@ -10,7 +10,7 @@ int K = 100;
 // Função para inicializar as matrizes com valores aleatórios
 void initialize_matrix(int *matrix, int rows, int cols) {
     for (int i = 0; i < rows * cols; i++) {
-        matrix[i] = rand() % 9 + 1; // Valores entre -5 e 5
+        matrix[i] = rand() % 10 + 1; 
     }
 }
 
