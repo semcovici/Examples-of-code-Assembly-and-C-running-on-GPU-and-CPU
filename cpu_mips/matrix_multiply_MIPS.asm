@@ -222,9 +222,9 @@ lw $t1, 0($t1)
 sub $t1, $t1, $t0
 
 
-li $v0, 4          # Código da syscall para print_string
-la $a0, elapsed_time_msg    # Carrega o endereço da string "\n" em $a0
-syscall            # Chama a syscall para imprimir a quebra de linha
+# li $v0, 4          # Código da syscall para print_string
+# la $a0, elapsed_time_msg    # Carrega o endereço da string "\n" em $a0
+# syscall            # Chama a syscall para imprimir a quebra de linha
 
 # Imprime o tempo decorrido
 li   $v0, 1           # Syscall para imprimir inteiro

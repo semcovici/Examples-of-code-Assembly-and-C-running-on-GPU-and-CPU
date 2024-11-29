@@ -3,9 +3,9 @@
 #include <time.h>
 
 // Dimensões das matrizes
-int M = 1024 * 1 + 1;
-int N = 1024 * 1 + 7;
-int K = 1024 * 1 + 11;
+int M = 125;
+int N = 135;
+int K = 131;
 
 // Função para inicializar as matrizes com valores aleatórios
 void initialize_matrix(int *matrix, int rows, int cols) {

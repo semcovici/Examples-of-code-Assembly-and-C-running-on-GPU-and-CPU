@@ -10,9 +10,9 @@
 inline void cudaAssert(cudaError_t code, const char *file, int line, bool abort=true);
 void check_result(std::vector<int>& A, std::vector<int>& B, std::vector<int>& C);
 
-int M = 1024*1+1;
-int N = 1024*1+7;
-int K = 1024*1+11;
+int M = 125;
+int N = 135;
+int K = 131;
 
 /*******************************************************************
   * Kernel code
