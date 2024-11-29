@@ -79,12 +79,18 @@ li $v0, 10
 syscall
 
 multiply:
-  # Register usage:
-  # n is $s0, m is $s1, p is $s2,
-  # r is $s3, c is $s4, i is $s5,
-  # sum is $s6
 
-  # Prologue
+#################################
+# $a0, M  # Número de linhas de A e C
+# $a1, K  # Número de colunas de A e linhas de B
+# $a2, N  # Número de colunas de B e C
+#################################
+# Uso de registradores:
+# n = $s0, m = $s1, k = $s2,
+# r = $s3, c = $s4, i = $s5,
+# sum = $s6
+
+  # Salva na pilha
   sw   $fp, -4($sp)
   la   $fp, -4($sp)
   sw   $ra, -4($fp)
@@ -97,10 +103,10 @@ multiply:
   sw   $s6, -32($fp)
   addi $sp, $sp, -36
 
-  # Save arguments
+  # Salva argumentos de entrada
   move $s0, $a0             # n
   move $s1, $a1             # m
-  move $s2, $a2             # p
+  move $s2, $a2             # k
 
   li   $s3, 0               # r = 0
   li   $t0, 4               # sizeof(Int)
@@ -110,15 +116,15 @@ mult_loop:
   li   $s4, 0               # c = 0
 
 mult_loop2:
-  bge  $s4, $s2, mult_end2  # if c >= p, branch
+  bge  $s4, $s2, mult_end2  # if c >= k, branch
   li   $s6, 0               # int sum = 0;
   j    mult_loop3
 
 mult_store:
-  mul  $t3, $s3, $s2        # t3 = r * p
+  mul  $t3, $s3, $s2        # t3 = r * k
   mul  $t3, $t3, $t0        # t3 = t3 * 4
   mul  $t4, $s4, $t0        # t4 = c * 4
-  add  $t3, $t3, $t4        # t3 = t3 * t4 = (r * p * 4) + (c * 4)
+  add  $t3, $t3, $t4        # t3 = t3 * t4 = (r * k * 4) + (c * 4)
   sw   $s6, C($t3)          # C[r][c] = sum;
 
   addi $s4, $s4, 1          # c++
@@ -170,7 +176,7 @@ mult_end:
 
 # Função para imprimir a matriz C
 print_matrix:
-    # Registrar os parâmetros da matriz (n, p)
+    # Registrar os parâmetros da matriz (n, k)
     lw   $t0, M            # $t0 = M (número de linhas)
     lw   $t1, N            # $t1 = N (número de colunas)
     li   $t2, 0            # $t2 = linha atual (r)
@@ -181,12 +187,12 @@ print_row_loop:
     li   $t3, 0            # $t3 = coluna atual (c)
 
 print_col_loop:
-    bge  $t3, $t1, next_row  # Se $t3 >= p, vai para a próxima linha
+    bge  $t3, $t1, next_row  # Se $t3 >= k, vai para a próxima linha
 
     # Calcula o endereço do elemento C[r][c]
-    mul  $t4, $t2, $t1     # $t4 = r * p
-    add  $t4, $t4, $t3     # $t4 = (r * p) + c
-    mul  $t4, $t4, 4       # $t4 = (r * p + c) * 4
+    mul  $t4, $t2, $t1     # $t4 = r * k
+    add  $t4, $t4, $t3     # $t4 = (r * k) + c
+    mul  $t4, $t4, 4       # $t4 = (r * k + c) * 4
     lw   $t5, C($t4)       # Carrega C[r][c] em $t5
 
     # Printar o elemento C[r][c]
