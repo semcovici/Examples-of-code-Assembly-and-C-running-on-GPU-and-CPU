@@ -35,7 +35,6 @@ void measure_basic(const int* d_A, int* d_B, int* d_C, int loop_exe=LOOP) {
     printf("Basic kernel launched...\n");
 
     // Define que o bloco de threads (que executam em paralelo) tem 16×16=256 threads (bloco bidimensional)
-    // Threads no mesmo bloco podem compartilhar dados
     const dim3 dim_threads(16, 16);
 
     //Define o grid (grupo de blocos) -> blocos não compartilham dados entre si
@@ -67,9 +66,9 @@ void measure_basic(const int* d_A, int* d_B, int* d_C, int loop_exe=LOOP) {
     cudaErrChk( cudaEventElapsedTime(&msec_total, start, stop) );
 
 
-    printf(" -- Total number of multiplications : %.3f Gops\n", gops/loop_exe);
-    printf(" -- Avg. elapsed time: %.3f s\n", msec_total/loop_exe*1e-3);
-    printf(" -- Avg. GILOPS : %.3f\n", (gops/loop_exe)/(msec_total/loop_exe*1e-3));
+        printf(" -- Total number of multiplications : %.3f Gops\n", gops/loop_exe);
+        printf(" -- Avg. elapsed time: %.3f s\n", msec_total/loop_exe*1e-3);
+        printf(" -- Avg. GILOPS : %.3f\n", (gops/loop_exe)/(msec_total/loop_exe*1e-3));
 
 }
 
