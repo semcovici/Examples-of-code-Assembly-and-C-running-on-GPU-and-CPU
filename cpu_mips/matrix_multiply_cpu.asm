@@ -104,27 +104,27 @@ multiply:
   addi $sp, $sp, -36
 
   # Salva argumentos de entrada
-  move $s0, $a0             # n
-  move $s1, $a1             # m
-  move $s2, $a2             # k
+  move $s0, $a0             #  m
+  move $s1, $a1             # k
+  move $s2, $a2             #  n
 
   li   $s3, 0               # r = 0
   li   $t0, 4               # sizeof(Int)
 
 mult_loop:
-  bge  $s3, $s0, mult_end   # if r >= n, branch
+  bge  $s3, $s0, mult_end   # if r >= m, branch
   li   $s4, 0               # c = 0
 
 mult_loop2:
-  bge  $s4, $s2, mult_end2  # if c >= k, branch
+  bge  $s4, $s2, mult_end2  # if c >= n, branch
   li   $s6, 0               # int sum = 0;
   j    mult_loop3
 
 mult_store:
-  mul  $t3, $s3, $s2        # t3 = r * k
+  mul  $t3, $s3, $s2        # t3 = r * m
   mul  $t3, $t3, $t0        # t3 = t3 * 4
   mul  $t4, $s4, $t0        # t4 = c * 4
-  add  $t3, $t3, $t4        # t3 = t3 * t4 = (r * k * 4) + (c * 4)
+  add  $t3, $t3, $t4        # t3 = t3 * t4 = (r * m * 4) + (c * 4)
   sw   $s6, C($t3)          # C[r][c] = sum;
 
   addi $s4, $s4, 1          # c++
@@ -133,20 +133,20 @@ mult_store:
   j    mult_loop2
 
 mult_loop3:
-  bge  $s5, $s1, mult_store # if i >= m, branch
+  bge  $s5, $s1, mult_store # if i >= k, branch
 
   # A[r][i]
-  mul  $t5, $s3, $s1        # t5 = r * m
+  mul  $t5, $s3, $s1        # t5 = r * k
   mul  $t5, $t5, $t0        # t5 = t5 * 4
   mul  $t6, $s5, $t0        # t6 = i * 4
-  add  $t5, $t5, $t6        # t5 = (r * m * 4) + (i * 4)
+  add  $t5, $t5, $t6        # t5 = (r * k * 4) + (i * 4)
   lw   $t5, A($t5)
 
   # B[i][c]
-  mul  $t7, $s5, $s2        # t7 = i * n
+  mul  $t7, $s5, $s2        # t7 = i * m
   mul  $t7, $t7, $t0        # t7 = t7 * 4
   mul  $t8, $s4, $t0        # t8 = 4 * c
-  add  $t7, $t7, $t8        # t7 = (i * n * 4) + (c * 4)
+  add  $t7, $t7, $t8        # t7 = (i * m * 4) + (c * 4)
   lw   $t7, B($t7)
 
   mul  $t7, $t5, $t7        # t7 = t5 * t7
